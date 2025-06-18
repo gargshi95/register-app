@@ -63,18 +63,20 @@ pipeline{
           }
         }   
      }
-         stage('trivy scan'){
-          steps {
-             script {
-                  docker run --rm \
-                    -v /var/run/docker.sock:/var/run/docker.sock \
-                    -v $(pwd)/trivy-cache:/root/.cache/ \
-                    aquasec/trivy:latest \
-                    image --exit-code 1 --severity CRITICAL,HIGH \
+         stage('Trivy Scan') {
+    steps {
+        script {
+            sh """#!/bin/bash
+                docker run --rm \\
+                    -v /var/run/docker.sock:/var/run/docker.sock \\
+                    -v \$(pwd)/trivy-cache:/root/.cache/ \\
+                    aquasec/trivy:latest \\
+                    image --exit-code 1 --severity CRITICAL,HIGH \\
                     gargayu710/register-app-pipeline:latest
-          }
-        } 
-      }
+            """
+        }
+    }
+}
        stage('Cleanup Artifacts'){
           steps {
              script {  
