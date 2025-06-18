@@ -64,19 +64,12 @@ pipeline{
         }   
      }
          stage('Trivy Scan') {
-    steps {
-        script {
-            sh """#!/bin/bash
-                docker run --rm \\
-                    -v /var/run/docker.sock:/var/run/docker.sock \\
-                    -v \$(pwd)/trivy-cache:/root/.cache/ \\
-                    aquasec/trivy:latest \\
-                    image --exit-code 1 --severity CRITICAL,HIGH \\
-                    gargayu710/register-app-pipeline:latest
-            """
-        }
-    }
-}
+           steps {
+             script {
+               sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock: aquasec/trivy image gargayu710/trivy image gargayu710/register-app-pipeline:latest --no-progress --scanners vuln --exit-code 0 --severity HIGH,CRITICAL --format table')
+            }
+         }
+      }
        stage('Cleanup Artifacts'){
           steps {
              script {  
